@@ -1,0 +1,294 @@
+{% raw -%}# This is a [`mdbook`][1] [config file][2]. Some of the fields were filled in by
+# [`cargo-generate`][3] when it created your project from the template, but you
+# will need to replace others yourself.  The comments should tell you what each
+# parameter is and how to change it.
+#
+# [1]: https://rust-lang.github.io/mdBook
+# [2]: https://rust-lang.github.io/mdBook/format/configuration/index.html
+# [3]: https://crates.io/crates/cargo-generate{%- endraw %}
+
+[book]
+# The title of the book
+title = "{{user_guide_title}}"
+
+# The author(s) of the book
+authors = [
+    "{{authors}}"
+]
+
+{% raw -%}# A description for the book, which is added as meta information in the html
+# <head> of each page.{%- endraw %}
+description = "{{short_description}}"
+
+{% raw -%}# By default, the source directory is found in the directory named `src`
+# directly under the root folder, but this is configurable with the `src` key
+# below.{%- endraw %}
+#src = ""
+
+{% raw -%}# The main language of the book, which is used as a language attribute
+# `<html lang="en">` for example.{%- endraw %}
+language = "en"
+
+# The direction of text in the book: Left-to-right (LTR) or Right-to-left
+# (RTL). Possible values: "ltr", "rtl". When not specified, the text direction
+# is derived from the book’s language attribute.
+#text-direction = "ltr"
+
+[rust]
+# Rust edition to use by default for the code snippets. The edition defaults to
+# whatever the main project is using.
+edition = "{{rust_edition}}"
+
+{% raw -%}
+[build]
+# The directory to put the rendered book in. By default this is `book/` in the
+# book's root directory. This can overridden with the `--dest-dir` CLI option.
+#build-dir = ""
+
+# By default, any missing files specified in `SUMMARY.md` will be created when
+# the book is built (i.e. `create-missing = true`). If this is `false` then the
+# build process will instead exit with an error if any files do not exist.
+create-missing = true
+
+# Disable the default preprocessors (of `links` & `index`) by setting this
+# option to false. If you have the same, and/or other preprocessors declared
+# via their table of configuration, they will run instead.
+#
+#  - For clarity, with no preprocessor configuration, the default links and
+#    index will run.
+#  - Setting use-default-preprocessors = false will disable these default
+#    preprocessors from running.
+#  - Adding [preprocessor.links], for example, will ensure, regardless of
+#    use-default-preprocessors that links it will run.
+use-default-preprocessors = true
+
+# A list of paths to directories that will be watched in the watch and serve
+# commands. Changes to files under these directories will trigger rebuilds.
+# Useful if your book depends on files outside its src directory.
+extra-watch-dirs = [
+]
+
+# Request that the output be in HTML.
+[output.html]
+# mdBook comes with a default theme and all the resource files needed for it.
+# But if this option is set, mdBook will selectively overwrite the theme files
+# with the ones found in the specified folder.
+#theme = "my-theme"
+
+# The theme color scheme to select by default in the ‘Change Theme’ dropdown.
+# Defaults to light.
+#default-theme = "light"
+
+# The default dark theme. This theme will be used if the browser requests the
+# dark version of the site via the [prefers-color-scheme][1] CSS media query.
+# Defaults to navy.
+#
+# [1]: https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-color-scheme
+#preferred-dark-theme = "navy"
+
+# Converts quotes to curly quotes, `...` to `…`, `--` to `en-dash`, and `---` to
+# `em-dash`. Defaults to false.
+#smart-punctuation = false
+
+# Adds support for MathJax. Defaults to false.
+mathjax-support = true
+
+# If you need to slightly change the appearance of your book without overwriting
+# the whole style, you can specify a set of stylesheets that will be loaded
+# after the default ones where you can surgically change the style.
+#additional-css = ["custom.css", "custom2.css"]
+
+# If you need to add some behaviour to your book without removing the current
+# behaviour, you can specify a set of JavaScript files that will be loaded
+# alongside the default one.
+#additional-js = ["custom.js"]
+
+# mdBook by defaults adds numeric section labels in the table of contents
+# column. For example, “1.”, “2.1”. Set this option to true to disable those
+# labels. Defaults to false.
+#no-section-label = false
+
+# A url to the git repository for the book. If provided an icon link will be
+# output in the menu bar of the book.
+#git-repository-url = "https://github.com/rust-lang/mdBook"
+
+# The FontAwesome icon class to use for the git repository link. Defaults to
+# 'fa-github'. If you are not using GitHub, another option to consider
+#  is 'fa-code-fork'.
+#git-repository-icon = "fa-github"
+
+# Edit url template, when provided shows a “Suggest an edit” button for directly
+# jumping to editing the currently viewed page. For e.g. GitHub projects set
+# this to 'https://github.com/<owner>/<repo>/edit/<branch>/{path}' or for
+# Bitbucket projects set it to
+# 'https://bitbucket.org/<owner>/<repo>/src/<branch>/{path}?mode=edit' where
+# '{path}'' will be replaced with the full path of the file in the repository.
+#edit-url-template = "https://github.com/rust-lang/mdBook/edit/master/guide/{path}"
+
+# The name of the markdown file used for missing files. The corresponding output
+# file will be the same, with the extension replaced with html. Defaults to
+# 404.md.
+#input-404 = "not-found.md"
+
+# The url where the book will be hosted. This is required to ensure navigation
+# links and script/css imports in the 404 file work correctly, even when
+# accessing urls in subdirectories. Defaults to '/'. If 'site-url' is set, make
+# sure to use document relative links for your assets, meaning they should not
+# start with '/'.
+#site-url = "/example-book/"
+
+# The DNS subdomain or apex domain at which your book will be hosted. This
+# string will be written to a file named CNAME in the root of your site, as
+# required by GitHub Pages (see Managing a custom domain for your GitHub Pages
+# site).
+#cname = "myproject.rs"
+
+[output.html.print]
+# Enable print support. When false, all print support will not be rendered.
+# Defaults to true.
+enable = true
+
+# Insert page breaks between chapters. Defaults to true.
+page-break = true
+
+[output.html.fold]
+# Enable section-folding. When off, all folds are open. Defaults to false.
+enable = true
+
+# The higher the more folded regions are open. When level is 0, all folds are
+# closed. Defaults to 0.
+level = 0
+
+[output.html.playground]
+# Allow editing the source code. Defaults to false.
+editable = true
+
+# Display the copy button on code snippets. Defaults to true.
+copyable = true
+
+# Copy JavaScript files for the editor to the output directory. Defaults to
+# true.
+copy-js = true
+
+# Display line numbers on editable sections of code. Requires both editable and
+# copy-js to be true. Defaults to false.
+line-numbers = false
+
+# Displays a run button for rust code snippets. Changing this to false will
+# disable the run in playground feature globally. Defaults to true.
+runnable = true
+
+[output.html.code]
+# A table that defines how [hidden code lines][1] work for each language. The
+# key is the language and the value is a string that will cause code lines
+# starting with that prefix to be hidden.
+#
+# [1]: https://rust-lang.github.io/mdBook/format/mdbook.html#hiding-code-lines
+#hidelines = { python = "~" }
+
+[output.html.search]
+# Enables the search feature. Defaults to true.
+#enable = true
+
+# The maximum number of search results. Defaults to 30.
+#limit-results = 30
+
+# The number of words used for a search result teaser. Defaults to 30.
+#teaser-word-count = 30
+
+# Define the logical link between multiple search words. If true, all search
+# words must appear in each result. Defaults to false.
+#use-boolean-and = false
+
+# Boost factor for the search result score if a search word appears in the
+# header. Defaults to 2.
+#boost-title = 2
+
+# Boost factor for the search result score if a search word appears in the
+# hierarchy. The hierarchy contains all titles of the parent documents and all
+# parent headings. Defaults to 1.
+#boost-hierarchy = 1
+
+# Boost factor for the search result score if a search word appears in the text.
+# Defaults to 1.
+#boost-paragraph = 1
+
+# True if search should match longer results e.g. search micro should match
+# microwave. Defaults to true.
+#expand = true
+
+# Search results will link to a section of the document which contains the
+# result. Documents are split into sections by headings this level or less.
+# Defaults to 3. (### This is a level 3 heading)
+#heading-split-level = 3
+
+# Copy JavaScript files for the search implementation to the output directory.
+# Defaults to true.
+#copy-js = true
+
+#
+#[output.html.redirect]
+#"/appendices/bibliography.html" = "https://rustc-dev-guide.rust-lang.org/appendix/bibliography.html"
+#"/other-installation-methods.html" = "../infra/other-installation-methods.html"
+
+# Verify that all links are live links.  Requires the [`mdbook-linkcheck`][1]
+# tool to work correctly.
+#
+# [1]: https://crates.io/crates/mdbook-linkcheck
+[output.linkcheck]
+
+# Should we check links on the internet? Enabling this option adds a
+# non-negligible performance impact.
+follow-web-links = true
+
+# Are we allowed to link to files outside of the book's root directory? This may
+# help prevent linking to sensitive files (e.g. "../../../../etc/shadow")
+traverse-parent-directories = false
+
+# If necessary, you can exclude one or more links from being checked with a list
+# of regular expressions. The regex will be applied to the link href (i.e. the
+# `./index.html` in `[some page](./index.html)`) so it can be used to ignore
+# both web and filesystem links.
+#
+# Hint: you can use TOML's raw strings (single quote) to avoid needing to escape
+# things twice.
+#exclude = [ 'google\.com' ]
+
+# The User-Agent to use when sending web requests
+user-agent = "mdbook-linkcheck-0.7.7"
+
+# The number of seconds a cached result is valid for (12 hrs by default)
+cache-timeout = 43200
+
+# How should warnings be treated?
+#
+# - "warn" will emit warning messages
+# - "error" treats all warnings as errors, failing the linkcheck
+# - "ignore" will ignore warnings, suppressing diagnostic messages and allowing
+#   the linkcheck to continuing
+warning-policy = "warn"
+
+# Extra HTTP headers that must be sent to certain web sites in order to link
+# check to succeed.
+#
+# This is a dictionary (map), with keys being regexes matching a set of web
+# sites, and values being an array of the headers.
+[output.linkcheck.http-headers]
+
+# Any hyperlink that contains this regexp will be sent
+# the "Accept: text/html" header
+'crates\.io' = [
+    "Accept: text/html"
+]
+
+# mdbook-linkcheck will interpolate environment variables into your header via
+# $IDENT.
+#
+# If this is not what you want you must escape the `$` symbol, like `\$TOKEN`.
+# `\` itself can also be escaped via `\\`.
+#
+# Note: If interpolation fails, the header will be skipped and the failure will
+# be logged. This can be useful if a particular header isn't always necessary,
+# but may be helpful (e.g. when working with rate limiting).
+#'website\.com' = ["Authorization: Basic $TOKEN"]
+{%- endraw %}

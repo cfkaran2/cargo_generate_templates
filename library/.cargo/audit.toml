@@ -1,0 +1,73 @@
+# Example audit config file for the [`cargo-audit`][1] tool.
+#
+# It may be located in the user home (`~/.cargo/audit.toml`) or in the project
+# root (`.cargo/audit.toml`).
+#
+# All of the options which can be passed via CLI arguments can also be
+# permanently specified in this file.
+#
+# The latest version of this file can be found at:
+#
+#   https://github.com/rustsec/rustsec/blob/main/cargo-audit/audit.toml.example
+#
+# [1]: https://crates.io/crates/cargo-audit
+
+[advisories]
+# advisory IDs to ignore e.g. ["RUSTSEC-2019-0001", ...]
+ignore = [
+]
+
+# warn for categories of informational advisories
+informational_warnings = [
+    "unmaintained",
+]
+
+# CVSS severity ("none", "low", "medium", "high", "critical")
+severity_threshold = "low"
+
+# Advisory Database Configuration
+[database]
+# Path where advisory git repo will be cloned
+path = "~/.cargo/advisory-db"
+
+# URL to git repo
+url = "https://github.com/RustSec/advisory-db.git"
+
+# Perform a `git fetch` before auditing (default: true)
+fetch = true
+
+# Allow stale advisory DB (i.e. no commits for 90 days, default: false)
+stale = false
+
+# Output Configuration
+[output]
+# exit on error if unmaintained dependencies are found
+deny = [
+    "unmaintained",
+]
+
+# "terminal" (human readable report) or "json"
+format = "terminal"
+
+# Only print information on error
+quiet = false
+
+# Show inverse dependency trees along with advisories (default: true)
+show_tree = true
+
+# Target Configuration
+[target]
+# Ignore advisories for CPU architectures other than these
+arch = [
+]
+
+# Ignore advisories for operating systems other than these
+os = [
+]
+
+[yanked]
+# Warn for yanked crates in Cargo.lock (default: true)
+enabled = true
+
+# Auto-update the crates.io index (default: true)
+update_index = true

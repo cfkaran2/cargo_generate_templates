@@ -1,0 +1,37 @@
+[template]
+cargo_generate_version = ">=0.9.0"
+
+[placeholders.rust_edition]
+type = "string"
+prompt = "Please provide the rust edition you wish to use"
+choices = ["2015", "2018", "2021"]
+default = "2021"
+
+[placeholders.short_description]
+type = "string"
+prompt = "Please provide a one-line description of your project"
+
+[placeholders.long_description]
+type = "string"
+prompt = "Please provide a longer description of your project (1-5 paragraphs)"
+
+[placeholders.version]
+type = "string"
+prompt = "Please provide a SemVer 2.0.0 compatible version number"
+default = "0.1.0"
+# The following regular expression is the one suggested at the bottom of the
+# page at https://semver.org/
+regex = "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$"
+
+[placeholders.identifier]
+type = "string"
+prompt = "Please provide a universally unique identifier for your project.  Examples of this are 'com.example.appname' or 'io.github.username.project'"
+
+[placeholders.abuse_email]
+type = "string"
+prompt = "Please provide an email address where violations of the Contributor Covenant Code of Conduct can be sent"
+
+[placeholders.user_guide_title]
+type = "string"
+prompt = "Please provide a title for your user guide.  If you don't provide one, then the default title of 'User Guide' will be used."
+default = "User Guide"
