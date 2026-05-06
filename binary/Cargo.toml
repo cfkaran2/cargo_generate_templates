@@ -1,0 +1,287 @@
+# See more keys and their definitions at
+# https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[package]
+name = "{{project-name}}"
+version = "{{version}}"
+edition = "{{rust_edition}}"
+authors = [
+    "{{authors}}"
+]
+description = "{{short_description}}"
+readme = "README.md"
+license = "Apache-2.0 OR MIT"
+keywords = [
+]
+categories = [
+]
+publish = false
+
+[badges]
+# The `maintenance` table indicates the status of the maintenance of the crate.
+# This may be used by a registry, but is currently not used by crates.io. See
+# https://github.com/rust-lang/crates.io/issues/2437 and
+# https://github.com/rust-lang/crates.io/issues/2438 for more details.
+#
+# The `status` field is required. Available options are:
+# - `actively-developed`: New features are being added and bugs are being
+#   fixed.
+# - `passively-maintained`: There are no plans for new features, but the
+#   maintainer intends to respond to issues that get filed.
+# - `as-is`: The crate is feature complete, the maintainer does not intend to
+#   continue working on it or providing support, but it works for the purposes
+#   it was designed for.
+# - `experimental`: The author wants to share it with the community but is not
+#   intending to meet anyone's particular use case.
+# - `looking-for-maintainer`: The current maintainer would like to transfer the
+#   crate to someone else.
+# - `deprecated`: The maintainer does not recommend using this crate
+#   (the description of the crate can describe why, there could be a better
+#   solution available or there could be problems with the crate that the
+#   author does not want to fix).
+# - `none`: Displays no badge on crates.io, since the maintainer has not chosen
+#   to specify their intentions, potential crate users will need to investigate
+#   on their own.
+maintenance = { status = "none" }
+
+[lints.rust]
+absolute_paths_not_starting_with_crate = "warn"
+dead_code = "warn"
+deprecated_in_future = "warn"
+ffi_unwind_calls = "warn"
+invalid_reference_casting = "warn"
+keyword_idents = "warn"
+let_underscore_drop = "warn"
+macro_use_extern_crate = "warn"
+missing_abi = "warn"
+missing_copy_implementations = "warn"
+missing_debug_implementations = "warn"
+missing_docs = "warn"
+non_ascii_idents = "warn"
+rust_2021_incompatible_closure_captures = "warn"
+rust_2021_incompatible_or_patterns = "warn"
+rust_2021_prefixes_incompatible_syntax = "warn"
+rust_2021_prelude_collisions = "warn"
+single_use_lifetimes = "warn"
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(coverage_nightly)'] }
+unreachable_pub = "warn"
+unsafe_code = "warn"
+unsafe_op_in_unsafe_fn = "warn"
+unused_crate_dependencies = "warn"
+unused_extern_crates = "warn"
+unused_import_braces = "warn"
+unused_lifetimes = "warn"
+unused_qualifications = "warn"
+unused_results = "warn"
+
+[lints.clippy]
+cargo = "warn"
+complexity = "warn"
+correctness = { level = "deny", priority = 127 }
+pedantic = "warn"
+perf = "warn"
+style = "warn"
+suspicious = "warn"
+
+# These are part of the restriction group.  See
+# https://rust-lang.github.io/rust-clippy/rust-1.81.0/index.html#/?groups=restriction
+# for more information.
+allow_attributes = "warn"
+allow_attributes_without_reason = "warn"
+arithmetic_side_effects = "warn"
+clone_on_ref_ptr = "warn"
+default_numeric_fallback = "warn"
+default_union_representation = "warn"
+else_if_without_else = "warn"
+
+[dependencies]
+coverage-helper = { version = "^0.2" }
+#debug_tree = { version = "^0.4" }
+#itertools = "0.13.0"
+#log = { version = "^0.4", features = ["kv_serde"] }
+#rayon = { version = "^1.10" }
+semver = { version = "^1.0" }
+thiserror = { version = "^1.0" }
+
+[dev-dependencies]
+bolero = { version = "^0.11", features = [
+    "arbitrary",
+] }
+#pretty_env_logger = { version = "^0.5" }
+
+# This profile is required for Bolero to work correctly. See
+# https://camshaft.github.io/bolero/library-installation.html for more info.
+[profile.fuzz]
+inherits = "dev"
+opt-level = 3
+incremental = false
+codegen-units = 1
+
+[profile.release]
+opt-level = 3
+incremental = false
+lto = true
+codegen-units = 1
+panic = "unwind"
+
+# This is the configuration information for the
+# [`cargo release`](https://crates.io/crates/cargo-release) tool
+[package.metadata.release]
+# allow-branch = ["*", "!HEAD"] # Only for workspaces
+# consolidate-commits = false # Only for workspaces
+dependent-version = "upgrade"
+enable-all-features = false
+enable-features = [
+]
+metadata = "optional"
+owners = [
+    "{{authors}}"
+]
+pre-release-commit-message = {% raw -%}"chore(release): Release {{crate_name}} version {{version}}"{%- endraw %}
+pre-release-hook = {% raw -%}[
+    "git",
+    "cliff",
+    "-o",
+    "CHANGELOG.md",
+    "--tag",
+    "{{version}}",
+]{%- endraw %}
+pre-release-replacements = [
+]
+publish = false
+push = true
+push-options = [
+]
+push-remote = "origin"
+release = true
+sign-commit = true
+sign-tag = true
+tag = true
+tag-message = {% raw -%}"chore(release): Release {{crate_name}} version {{version}}"{%- endraw %}
+tag-name = {% raw -%}"{{prefix}}v{{version}}"{%- endraw %}
+verify = true
+# shared-version = true # Only for workspaces
+
+# This is the configuration information for the
+# [`cargo bundle`](https://crates.io/crates/cargo-bundle) tool.
+[package.metadata.bundle]
+
+### General settings
+### These settings apply to bundles for all (or most) OSes.
+
+# The name of the built application. If this is not present, then it will use
+# the name value from your Cargo.toml file.  Example: `"ExampleApplication"`
+name = "{{project-name}}"
+
+# [REQUIRED] A string that uniquely identifies your application, in reverse-DNS
+# form (for example, "com.example.appname" or "io.github.username.project").
+# For OS X and iOS, this is used as the bundle's CFBundleIdentifier value; for
+# Windows, this is hashed to create an application GUID.
+identifier = "{{identifier}}"
+
+# [OPTIONAL] The icons used for your application. This should be an array of
+# file paths or globs (with images in various sizes/formats); cargo-bundle will
+# automatically convert between image formats as necessary for different
+# platforms. Supported formats include ICNS, ICO, PNG, and anything else that
+# can be decoded by the image crate. Icons intended for high-resolution
+# (e.g. Retina) displays should have a filename with @2x just before the
+# extension.  Example: `["32x32.png", "128x128.png", "128x128@2x.png"]`
+icon = [
+]
+
+# [OPTIONAL] The version of the application. If this is not present, then it
+# will use the version value from your Cargo.toml file.  This must be a
+# well-formed and valid SemVer 2.0 string.
+version = "{{version}}"
+
+# [OPTIONAL] List of files or directories which will be copied to the resources
+# section of the bundle. Globs are supported.
+resources = [
+]
+
+# [OPTIONAL] This is a reserved field; at the moment it is not used for
+# anything, but may be used to run scripts while packaging the bundle
+# (e.g. download files, compress and encrypt, etc.).
+#script =
+
+# [OPTIONAL] This contains a copyright string associated with your application.
+#copyright =
+
+# [OPTIONAL] What kind of application this is. This can be a human-readable
+# string (e.g. "Puzzle game"), or a Mac OS X LSApplicationCategoryType value
+# (e.g. "public.app-category.puzzle-games"), or a GNOME desktop file category
+# name (e.g. "LogicGame"), and cargo-bundle will automatically convert as
+# needed for different platforms.
+#category =
+
+# [OPTIONAL] A short, one-line description of the application. If this is not
+# present, then it will use the description value from your Cargo.toml file.
+short_description = "{{short_description}}"
+
+# [OPTIONAL] A longer, multi-line description of the application.
+long_description = """{{long_description}}"""
+
+### Linux-specific settings
+###
+### These settings are used only when bundling Linux compatible packages
+### (currently deb only).
+
+# A list of strings which represent mime types. If present, these are assigned
+# to the MimeType field of the .desktop file.
+linux_mime_types = [
+]
+
+# A single string which is inserted after the name of the binary in the Exec
+# field in the .desktop file. For example if the binary is called my_program
+# and linux_exec_args = "%f" then the Exec filed will be Exec=my_program %f.
+# Find out more at
+# https://specifications.freedesktop.org/desktop-entry-spec/latest/ar01s07.html
+#linux_exec_args =
+
+# A boolean variable indicating the app is a console app or a gui app, default
+# it's set to false.
+linux_use_terminal = true
+
+### Debian-specific settings
+###
+### These settings are used only when bundling deb packages.
+
+# A list of strings indicating other packages (e.g. shared libraries) that this
+# package depends on to be installed. If present, this forms the Depends: field
+# of the deb package control file.
+deb_depends = [
+]
+
+### Mac OS X-specific settings
+###
+### These settings are used only when bundling osx packages.
+
+# A list of strings indicating any Mac OS X frameworks that need to be bundled
+# with the app. Each string can either be the name of a framework
+# (without the .framework extension, e.g. "SDL2"), in which case cargo-bundle
+# will search for that framework in the standard install locations
+# (~/Library/Frameworks/, /Library/Frameworks/,
+# and /Network/Library/Frameworks/), or a path to a specific framework bundle
+# (e.g. ./data/frameworks/SDL2.framework). Note that this setting just makes
+# cargo-bundle copy the specified frameworks into the OS X app bundle
+# (under Foobar.app/Contents/Frameworks/); you are still responsible for
+#
+#     1. Arranging for the compiled binary to link against those frameworks
+#        (e.g. by emitting lines like cargo:rustc-link-lib=framework=SDL2 from
+#        your build.rs script)
+#     2. Embedding the correct rpath in your binary (e.g. by running
+#        install_name_tool -add_rpath "@executable_path/../Frameworks"
+#        path/to/binary after compiling).
+osx_frameworks = [
+]
+
+# A version string indicating the minimum Mac OS X version that the bundled app
+# supports (e.g. "10.11"). If you are using this config field, you may also
+# want have your build.rs script emit
+# cargo:rustc-env=MACOSX_DEPLOYMENT_TARGET=10.11 (or whatever version number
+# you want) to ensure that the compiled binary has the same minimum version.
+#osx_minimum_system_version =
+
+# A list of strings indicating the URL schemes that the app handles.
+osx_url_schemes = [
+]

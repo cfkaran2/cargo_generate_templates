@@ -1,0 +1,363 @@
+# Configuration file for [`cargo make`](https://crates.io/crates/cargo-make)
+
+[config.modify_core_tasks]
+# If set to some value, all core tasks are modified to: <namespace>::<name>. For
+# example 'default::build'
+namespace = "cargo_make"
+
+[tasks.clean]
+command = "cargo"
+args = [
+    "clean",
+]
+
+[tasks.format_rust]
+toolchain = "nightly"
+command = "cargo"
+args = [
+    "fmt",
+    "--all",
+    "--",
+    "--emit=files",
+]
+
+[tasks.format_toml]
+install_crate = { crate_name = "taplo-cli", test_arg = "-V" }
+command = "taplo"
+args = [
+    "format",
+]
+
+[tasks.format]
+dependencies = [
+    "format_rust",
+    "format_toml",
+]
+
+[tasks.generate_readme]
+install_crate = { crate_name = "cargo-readme", test_arg = "-V" }
+command = "cargo"
+args = [
+    "readme",
+    "-o",
+    "README.md",
+    "-t",
+    "README.tpl",
+]
+
+[tasks.udeps]
+toolchain = "nightly"
+install_crate = { crate_name = "cargo-udeps", test_arg = "-V" }
+command = "cargo"
+args = [
+    "udeps",
+    "--workspace",
+    "--all-targets",
+]
+
+[tasks.clippy]
+command = "cargo"
+args = [
+    "clippy",
+]
+
+[tasks.deny]
+command = "cargo"
+args = [
+    "deny",
+    "check",
+    "-s",
+    "all",
+]
+
+[tasks.lint]
+dependencies = [
+    "udeps",
+    "clippy",
+    "deny",
+]
+
+[tasks.build]
+command = "cargo"
+args = [
+    "build",
+]
+
+[tasks.test]
+command = "cargo"
+args = [
+    "test",
+]
+
+[tasks.coverage_clean]
+install_crate = { crate_name = "cargo-llvm-cov", test_arg = "-V" }
+command = "cargo"
+args = [
+    "llvm-cov",
+    "clean",
+]
+
+[tasks.coverage_build]
+install_crate = { crate_name = "cargo-llvm-cov", test_arg = "-V" }
+command = "cargo"
+toolchain = "nightly"
+args = [
+    "llvm-cov",
+    "test",
+    "--frozen",
+    "--branch",
+    "--show-missing-lines",
+    "--open",
+]
+
+[tasks.coverage]
+dependencies = [
+    "coverage_clean",
+    "coverage_build",
+]
+
+[tasks.doc]
+command = "cargo"
+args = [
+    "doc",
+    "--workspace",
+    "--document-private-items",
+    "--lib",
+    "--bins",
+    "--examples",
+    "--all-features",
+]
+
+[tasks.build_user_guide]
+install_crate = { crate_name = "mdbook", test_arg = "-V" }
+command = "mdbook"
+args = [
+    "build",
+    "docs/user_guide",
+]
+
+[tasks.test_user_guide]
+install_crate = { crate_name = "mdbook", test_arg = "-V" }
+command = "mdbook"
+args = [
+    "test",
+    "docs/user_guide",
+]
+
+[tasks.dead_links]
+install_crate = { crate_name = "cargo-deadlinks", test_arg = "-V" }
+command = "cargo"
+args = [
+    "deadlinks",
+    "--check-intra-doc-links",
+]
+
+[tasks.dev-flow]
+dependencies = [
+    "format",
+    "generate_readme",
+    "lint",
+    "build",
+    "test",
+    "coverage",
+    "doc",
+    "dead_links",
+    "build_user_guide",
+    "test_user_guide",
+]
+
+[tasks.build_release]
+command = "cargo"
+args = [
+    "auditable",
+    "build",
+    "--release",
+]
+
+[tasks.test_release]
+command = "cargo"
+args = [
+    "test",
+    "--release",
+]
+
+[tasks.doc_release]
+command = "cargo"
+args = [
+    "doc",
+    "--workspace",
+    "-r",
+    "--lib",
+    "--bins",
+    "--examples",
+    "--all-features",
+]
+
+[tasks.optimized-flow]
+dependencies = [
+    "format",
+    "generate_readme",
+    "lint",
+    "build_release",
+    "test_release",
+    "doc_release",
+    "dead_links",
+    "build_user_guide",
+    "test_user_guide",
+]
+
+[tasks.bolero]
+install_crate = { crate_name = "cargo-bolero", test_arg = "-V" }
+script_runner = "@rust"
+script = '''
+//! ```cargo
+//! [dependencies]
+//! serde = { version = "^1.0", features = ["derive"] }
+//! serde_json = {version = "^1.0"}
+//! ```
+use std::process::{Command, Child, Output, Stdio};
+use std::error::Error;
+
+use serde::{Deserialize, Serialize};
+
+#[derive(Serialize, Deserialize)]
+struct BoleroTest {
+    pub package: String,
+    pub test: String,
+}
+
+fn main() -> Result<(), Box<dyn Error>> {
+    let output: Output = Command::new("cargo")
+                            .arg("bolero")
+                            .arg("list")
+                            .output()?;
+    let unparsed: String = String::from_utf8(output.stdout.clone())?;
+    let mut children: Vec<Child> = Vec::new();
+
+    for line in unparsed.lines() {
+        let r: serde_json::Result<BoleroTest> = serde_json::from_str(line);
+        match r {
+            Ok(t) => {
+                    let child: Child = Command::new("cargo")
+                                .arg("+nightly")
+                                .arg("bolero")
+                                .arg("test")
+                                .arg("-T")
+                                .arg("10min")
+                                .arg(&t.test)
+                                .stderr(Stdio::null())
+                                .spawn()?;
+                    children.push(child);
+                },
+            Err(e) => {
+                // EOF happens because Bolero's output isn't well-formed JSON;
+                // it's a stream of JSON maps separated by 2 new-line
+                // characters.  That means every other line is invalid JSON.
+                // For that reason we ignore EOF errors and just skip to the
+                // next line.
+                if !e.is_eof() {
+                    return Err(Box::new(e));
+                }
+            }
+        }
+    }
+
+    for child in children.iter_mut() {
+        child.wait()?;
+    }
+
+    children.clear();
+
+    let output: Output = Command::new("cargo")
+                            .arg("bolero")
+                            .arg("list")
+                            .output()?;
+    let unparsed: String = String::from_utf8(output.stdout.clone())?;
+
+    for line in unparsed.lines() {
+        let r: serde_json::Result<BoleroTest> = serde_json::from_str(line);
+        match r {
+            Ok(t) => {
+                    let child: Child = Command::new("cargo")
+                                .arg("+nightly")
+                                .arg("bolero")
+                                .arg("reduce")
+                                .arg(&t.test)
+                                .stderr(Stdio::null())
+                                .spawn()?;
+                    children.push(child);
+                },
+            Err(e) => {
+                // EOF happens because Bolero's output isn't well-formed JSON;
+                // it's a stream of JSON maps separated by 2 new-line
+                // characters.  That means every other line is invalid JSON.
+                // For that reason we ignore EOF errors and just skip to the
+                // next line.
+                if !e.is_eof() {
+                    return Err(Box::new(e));
+                }
+            }
+        }
+    }
+
+    for child in children.iter_mut() {
+        child.wait()?;
+    }
+
+    Ok(())
+}
+'''
+
+[tasks.help]
+script_runner = "@rust"
+script = '''
+use std::error::Error;
+
+fn main() -> Result<(), Box<dyn Error>> {
+    // FIXME: Maybe I should add intropection capabilities so that the target
+    // list is constructed by parsing Makefile.toml.  That would ensure that
+    // this target is never out of date.
+
+    // FIXME: The output is ugly.  Maybe I should use the textwrap crate to
+    // format the output nicely.  I don't expect CI to ever call this, so the
+    // lack of a terminal shouldn't be an issue.  OTOH, having the build fail
+    // because this file wasn't able to build the help script would be
+    // annoying... need to think more about this (and log some proper issues).
+
+    println!("\nThe following targets are the top-level targets for this \
+              project.  To use them, simply call them with 'cargo make'.  For \
+              the 'clean' target this would be the following:\n\n    \
+                  'cargo make clean'
+              \n\
+              If you call 'cargo make' without a target, then by default it \
+              will execute the 'dev-flow' target.  Additional targets can be \
+              found within the 'Makefile.toml' configuration file; if you are \
+              a developer, then I strongly suggest looking over the other \
+              targets as some of them can be useful on their own.\n");
+
+    println!("'clean' - Removes all build products from this project.\n");
+    println!("'dev-flow' - Builds all artifacts in debug mode.  This will \
+              also run numerous checks and tests, so it's a lot more than \
+              just a debug build.\n");
+    println!("'optimized-flow' - Builds all artifacts in release mode.  This \
+             mode runs fewer checks than 'dev-flow', but takes longer because \
+             of the effort taken for optimization.  Be warned that the \
+             options used can take much longer than you expect because of the \
+             settings some optimizations require to produce good output!\n");
+    println!("'bolero' - This uses the 'cargo bolero' tool to fuzz test your \
+              code.  This target will iterate through all tests that are \
+              compliant with Bolero's requirements and fuzz them for a period \
+              of 10 minutes each.  Note that this can produce a lot of new \
+              files in the repository (all of which will live within \
+              directories named '__fuzz__'); it is wise to keep those files \
+              in your repository because they store any failure cases that \
+              Bolero detects.  By storing these files in your repository, you \
+              can share the necessary state information for other members of \
+              your team to repeat the test cases to get the same failures.\n");
+
+    Ok(())
+}
+'''
+
+[tasks.default]
+alias = "dev-flow"
