@@ -31,6 +31,13 @@ prompt = "Please provide a universally unique identifier for your project.  Exam
 [placeholders.abuse_email]
 type = "string"
 prompt = "Please provide an email address where violations of the Contributor Covenant Code of Conduct can be sent"
+# The following regular expression came from the StackOverflow question at
+# https://stackoverflow.com/questions/201323/how-can-i-validate-an-email-address-using-a-regular-expression
+# BE WARNED! According to all of the internet sources I've been able to find,
+# there is NO perfect regex for parsing email addresses!  The following is the
+# best currently available, but there are corner cases that it isn't able to
+# accurately handle!  Good luck...
+regex = "(?:[a-z0-9!#$%&'*+\\x2f=?^_`\\x7b-\\x7d~\\x2d]+(?:\\.[a-z0-9!#$%&'*+\\x2f=?^_`\\x7b-\\x7d~\\x2d]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9\\x2d]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9\\x2d]*[a-z0-9])?|\\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9\\x2d]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])"
 
 [placeholders.user_guide_title]
 type = "string"
