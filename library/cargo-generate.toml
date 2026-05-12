@@ -1,5 +1,6 @@
 [template]
 cargo_generate_version = ">=0.9.0"
+ignore = [".DS_Store"]
 
 [placeholders.rust_edition]
 type = "string"
@@ -12,8 +13,8 @@ type = "string"
 prompt = "Please provide a one-line description of your project"
 
 [placeholders.long_description]
-type = "string"
-prompt = "Please provide a longer description of your project (1-5 paragraphs)"
+type = "editor"
+prompt = "Please provide a longer description of your project (1-5 paragraphs)."
 
 [placeholders.version]
 type = "string"
