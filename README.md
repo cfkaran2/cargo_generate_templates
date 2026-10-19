@@ -9,7 +9,7 @@ Once these are installed, you should be able to execute the following to get a
 new project from the templates:
 
 ```rust
-cargo generate -g git@github.com:cfkaran2/cargo_generate_templates.git
+cargo generate -g https://github.com/cfkaran2/cargo_generate_templates.git
 ```
 
 and [`cargo-generate`][2] should handle the rest for you, contacting GitHub to
