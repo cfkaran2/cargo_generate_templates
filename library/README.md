@@ -12,7 +12,6 @@ so, you **will** be unhappy at some point!
 This template uses numerous tools to simplify the development process.  The
 tools that are currently use are described below.
 
-
 ## `cargo audit`
 
 [`cargo-audit`][3] is a tool that is able to check your dependencies against

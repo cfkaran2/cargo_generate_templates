@@ -44,8 +44,8 @@ pub enum Error {
 
     /// Returned when the standard library is unable to parse a string as a
     /// floating point number.
-    #[error("There was an error while parsing a string as an integer.  \
-             Error was {source}.")]
+    #[error("There was an error while parsing a string as an integer.  Error \
+             was {source}.")]
     ParseIntError {
         /// The error that the parser ran into.
         #[from]
@@ -67,8 +67,8 @@ pub enum Error {
              be wrong.  Please read the code and try to figure out what the \
              issue is.  If you can't figure it out (or worse, if it turns \
              out that the implementation of 'std::str::FromStr' is buggy), \
-             please file a bug report so that the maintainers can try to \
-             fix it.")]
+             please file a bug report so that the maintainers can try to fix \
+             it.")]
     ParseError {
         /// The string that was being parsed.
         input: String,

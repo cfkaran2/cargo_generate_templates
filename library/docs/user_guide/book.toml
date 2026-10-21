@@ -13,7 +13,7 @@ title = "{{user_guide_title}}"
 
 # The author(s) of the book
 authors = [
-    "{{authors}}"
+    "{{authors}}",
 ]
 
 {% raw -%}# A description for the book, which is added as meta information in the html

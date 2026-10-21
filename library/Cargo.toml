@@ -6,7 +6,7 @@ name = "{{project-name}}"
 version = "{{version}}"
 edition = "{{rust_edition}}"
 authors = [
-    "{{authors}}"
+    "{{authors}}",
 ]
 description = "{{short_description}}"
 readme = "README.md"
@@ -63,7 +63,9 @@ rust_2021_incompatible_or_patterns = "warn"
 rust_2021_prefixes_incompatible_syntax = "warn"
 rust_2021_prelude_collisions = "warn"
 single_use_lifetimes = "warn"
-unexpected_cfgs = { level = "warn", check-cfg = ['cfg(coverage_nightly)'] }
+unexpected_cfgs = { level = "warn", check-cfg = [
+    'cfg(coverage_nightly)',
+] }
 unreachable_pub = "warn"
 unsafe_code = "warn"
 unsafe_op_in_unsafe_fn = "warn"
@@ -135,7 +137,7 @@ enable-features = [
 ]
 metadata = "optional"
 owners = [
-    "{{authors}}"
+    "{{authors}}",
 ]
 pre-release-commit-message = {% raw -%}"chore(release): Release {{crate_name}} version {{version}}"{%- endraw %}
 pre-release-hook = {% raw -%}[
