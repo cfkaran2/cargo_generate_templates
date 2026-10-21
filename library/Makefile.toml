@@ -162,8 +162,7 @@ args = [
     "doc",
     "--workspace",
     "--document-private-items",
-    "--lib",
-    "--bins",
+    {% if crate_type == "lib" %}"--lib",{% endif %}{% if crate_type == "bin" %}"--bins",{% endif %}
     "--examples",
     "--all-features",
 ]
@@ -211,8 +210,7 @@ args = [
     "doc",
     "--workspace",
     "-r",
-    "--lib",
-    "--bins",
+    {% if crate_type == "lib" %}"--lib",{% endif %}{% if crate_type == "bin" %}"--bins",{% endif %}
     "--examples",
     "--all-features",
 ]

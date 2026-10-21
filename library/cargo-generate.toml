@@ -43,3 +43,20 @@ regex = "(?:[a-z0-9!#$%&'*+\\x2f=?^_`\\x7b-\\x7d~\\x2d]+(?:\\.[a-z0-9!#$%&'*+\\x
 type = "string"
 prompt = "Please provide a title for your user guide.  If you don't provide one, then the default title of 'User Guide' will be used."
 default = "User Guide"
+
+[conditional.'crate_type == "bin"']
+# Files/folders on this list will be ignored entirely and are not included in
+# the final output.
+ignore = [ "src/lib.rs" ]
+
+[conditional.'crate_type == "lib"']
+# Files/folders on this list will be ignored entirely and are not included in
+# the final output.
+ignore = [ "src/main.rs" ]
+
+# These files will be processed for Liquid syntax by the template engine.
+# include = [ "..." ]
+
+# These files will not be processed for any liquid syntax. The files will be in
+# the final output.
+# exclude = [ "..." ]
