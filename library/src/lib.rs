@@ -24,6 +24,19 @@ pub mod error;
 // hide it during non-test builds; it will break your build.
 use coverage_helper as _;
 
+/// A nearly pointless function to ensure that the library isn't empty.
+///
+/// The only reason that this function exists is to make the coverage checking
+/// code happy.  Without it, no tests happen, which causes coverage to fail.
+///
+/// # Errors
+///
+/// If you're returning a [`Result`] type, then clippy expects you to have an
+/// `Errors` section in your docs for the function.
+pub fn always_succeeds() -> Result<(), Box<dyn std::error::Error>> {
+    Ok(())
+}
+
 //  ▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄    ▄▄▄▄    ▄▄▄▄▄▄▄▄    ▄▄▄▄
 //  ▀▀▀██▀▀▀  ██▀▀▀▀▀▀  ▄█▀▀▀▀█   ▀▀▀██▀▀▀  ▄█▀▀▀▀█
 //     ██     ██        ██▄          ██     ██▄
