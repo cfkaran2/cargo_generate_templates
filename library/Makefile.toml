@@ -206,108 +206,6 @@ dependencies = [
     "test_user_guide",
 ]
 
-[tasks.bolero]
-install_crate = { crate_name = "cargo-bolero", test_arg = "-V" }
-script_runner = "@rust"
-script = '''
-//! ```cargo
-//! [dependencies]
-//! serde = { version = "^1.0", features = ["derive"] }
-//! serde_json = {version = "^1.0"}
-//! ```
-use std::process::{Command, Child, Output, Stdio};
-use std::error::Error;
-
-use serde::{Deserialize, Serialize};
-
-#[derive(Serialize, Deserialize)]
-struct BoleroTest {
-    pub package: String,
-    pub test: String,
-}
-
-fn main() -> Result<(), Box<dyn Error>> {
-    let output: Output = Command::new("cargo")
-                            .arg("bolero")
-                            .arg("list")
-                            .output()?;
-    let unparsed: String = String::from_utf8(output.stdout.clone())?;
-    let mut children: Vec<Child> = Vec::new();
-
-    for line in unparsed.lines() {
-        let r: serde_json::Result<BoleroTest> = serde_json::from_str(line);
-        match r {
-            Ok(t) => {
-                    let child: Child = Command::new("cargo")
-                                .arg("+nightly")
-                                .arg("bolero")
-                                .arg("test")
-                                .arg("-T")
-                                .arg("10min")
-                                .arg(&t.test)
-                                .stderr(Stdio::null())
-                                .spawn()?;
-                    children.push(child);
-                },
-            Err(e) => {
-                // EOF happens because Bolero's output isn't well-formed JSON;
-                // it's a stream of JSON maps separated by 2 new-line
-                // characters.  That means every other line is invalid JSON.
-                // For that reason we ignore EOF errors and just skip to the
-                // next line.
-                if !e.is_eof() {
-                    return Err(Box::new(e));
-                }
-            }
-        }
-    }
-
-    for child in children.iter_mut() {
-        child.wait()?;
-    }
-
-    children.clear();
-
-    let output: Output = Command::new("cargo")
-                            .arg("bolero")
-                            .arg("list")
-                            .output()?;
-    let unparsed: String = String::from_utf8(output.stdout.clone())?;
-
-    for line in unparsed.lines() {
-        let r: serde_json::Result<BoleroTest> = serde_json::from_str(line);
-        match r {
-            Ok(t) => {
-                    let child: Child = Command::new("cargo")
-                                .arg("+nightly")
-                                .arg("bolero")
-                                .arg("reduce")
-                                .arg(&t.test)
-                                .stderr(Stdio::null())
-                                .spawn()?;
-                    children.push(child);
-                },
-            Err(e) => {
-                // EOF happens because Bolero's output isn't well-formed JSON;
-                // it's a stream of JSON maps separated by 2 new-line
-                // characters.  That means every other line is invalid JSON.
-                // For that reason we ignore EOF errors and just skip to the
-                // next line.
-                if !e.is_eof() {
-                    return Err(Box::new(e));
-                }
-            }
-        }
-    }
-
-    for child in children.iter_mut() {
-        child.wait()?;
-    }
-
-    Ok(())
-}
-'''
-
 [tasks.help]
 script_runner = "@rust"
 script = '''
@@ -344,16 +242,7 @@ fn main() -> Result<(), Box<dyn Error>> {
              of the effort taken for optimization.  Be warned that the \
              options used can take much longer than you expect because of the \
              settings some optimizations require to produce good output!\n");
-    println!("'bolero' - This uses the 'cargo bolero' tool to fuzz test your \
-              code.  This target will iterate through all tests that are \
-              compliant with Bolero's requirements and fuzz them for a period \
-              of 10 minutes each.  Note that this can produce a lot of new \
-              files in the repository (all of which will live within \
-              directories named '__fuzz__'); it is wise to keep those files \
-              in your repository because they store any failure cases that \
-              Bolero detects.  By storing these files in your repository, you \
-              can share the necessary state information for other members of \
-              your team to repeat the test cases to get the same failures.\n");
+    println!("'help' - Produces this help text and then exits.");
 
     Ok(())
 }

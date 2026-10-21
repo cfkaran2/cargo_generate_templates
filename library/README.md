@@ -120,18 +120,6 @@ producing warnings on any targets that don't exist or don't respond.
 [`mdbook-linkcheck`][21] is another link checker, but specifically designed for
 the [`mdbook`][12] tool.
 
-## `cargo bolero`
-
-[`cargo bolero`][22] is used to test code that uses [`bolero`][23] within its
-tests.  It uses the services of different fuzzers to really exercise your code.
-The generated output of this template includes the `cargo make bolero` target,
-which will exercise each test it finds for 10 minutes.  This can be useful for
-testing all of your code in relatively short bursts, or if you have a
-low-priority process running on your CT server that runs constantly.  As the
-tool runs, it will produce new files within your repository.  All of the files
-it produces are kept within individual `__fuzz__` directories.  Commit these to
-your repository so that your teammates can see the bugs that CT is catching.
-
 [1]: https://crates.io/crates/cargo-generate
 [2]: https://crates.io/crates/cargo-readme
 [3]: https://crates.io/crates/cargo-audit
@@ -153,5 +141,3 @@ your repository so that your teammates can see the bugs that CT is catching.
 [19]: https://crates.io/crates/cargo-llvm-cov
 [20]: https://crates.io/crates/cargo-deadlinks
 [21]: https://crates.io/crates/mdbook-linkcheck
-[22]: https://crates.io/crates/cargo-bolero
-[23]: https://crates.io/crates/bolero

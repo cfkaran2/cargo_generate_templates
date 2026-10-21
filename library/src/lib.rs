@@ -35,16 +35,11 @@ use coverage_helper as _;
 #[cfg(test)]
 #[cfg_attr(all(coverage_nightly, test), coverage(off))]
 mod tests {
-    use bolero::check;
-
     use super::*;
 
     #[test]
-    fn testing_bolero() {
-        check!()
-            .with_type::<u32>()
-            .for_each(|input| {
-               assert!(u128::MAX > (*input).into());
-            });
+    fn fake_test() {
+        assert!(always_succeeds().is_ok(),
+                "If this assertion fails, then the template is broken.");
     }
 }
