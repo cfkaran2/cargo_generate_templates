@@ -5,6 +5,14 @@
 # example 'default::build'
 namespace = "cargo_make"
 
+#   ▄▄▄▄    ▄▄    ▄▄     ▄▄     ▄▄▄▄▄▄    ▄▄▄▄▄▄▄▄  ▄▄▄▄▄
+# ▄█▀▀▀▀█   ██    ██    ████    ██▀▀▀▀██  ██▀▀▀▀▀▀  ██▀▀▀██
+# ██▄       ██    ██    ████    ██    ██  ██        ██    ██
+#  ▀████▄   ████████   ██  ██   ███████   ███████   ██    ██
+#      ▀██  ██    ██   ██████   ██  ▀██▄  ██        ██    ██
+# █▄▄▄▄▄█▀  ██    ██  ▄██  ██▄  ██    ██  ██▄▄▄▄▄▄  ██▄▄▄██
+#  ▀▀▀▀▀    ▀▀    ▀▀  ▀▀    ▀▀  ▀▀    ▀▀▀ ▀▀▀▀▀▀▀▀  ▀▀▀▀▀
+
 [tasks.clean]
 command = "cargo"
 args = [
@@ -77,6 +85,38 @@ dependencies = [
     "deny",
 ]
 
+[tasks.build_user_guide]
+install_crate = { crate_name = "mdbook", test_arg = "-V" }
+command = "mdbook"
+args = [
+    "build",
+    "docs/user_guide",
+]
+
+[tasks.test_user_guide]
+install_crate = { crate_name = "mdbook", test_arg = "-V" }
+command = "mdbook"
+args = [
+    "test",
+    "docs/user_guide",
+]
+
+[tasks.dead_links]
+install_crate = { crate_name = "cargo-deadlinks", test_arg = "-V" }
+command = "cargo"
+args = [
+    "deadlinks",
+    "--check-intra-doc-links",
+]
+
+# ▄▄▄▄▄     ▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄    ▄▄    ▄▄     ▄▄▄▄
+# ██▀▀▀██   ██▀▀▀▀▀▀  ██▀▀▀▀██  ██    ██   ██▀▀▀▀█
+# ██    ██  ██        ██    ██  ██    ██  ██
+# ██    ██  ███████   ███████   ██    ██  ██  ▄▄▄▄
+# ██    ██  ██        ██    ██  ██    ██  ██  ▀▀██
+# ██▄▄▄██   ██▄▄▄▄▄▄  ██▄▄▄▄██  ▀██▄▄██▀   ██▄▄▄██
+# ▀▀▀▀▀     ▀▀▀▀▀▀▀▀  ▀▀▀▀▀▀▀     ▀▀▀▀       ▀▀▀▀
+
 [tasks.build]
 command = "cargo"
 args = [
@@ -128,30 +168,6 @@ args = [
     "--all-features",
 ]
 
-[tasks.build_user_guide]
-install_crate = { crate_name = "mdbook", test_arg = "-V" }
-command = "mdbook"
-args = [
-    "build",
-    "docs/user_guide",
-]
-
-[tasks.test_user_guide]
-install_crate = { crate_name = "mdbook", test_arg = "-V" }
-command = "mdbook"
-args = [
-    "test",
-    "docs/user_guide",
-]
-
-[tasks.dead_links]
-install_crate = { crate_name = "cargo-deadlinks", test_arg = "-V" }
-command = "cargo"
-args = [
-    "deadlinks",
-    "--check-intra-doc-links",
-]
-
 [tasks.dev-flow]
 dependencies = [
     "format",
@@ -165,6 +181,14 @@ dependencies = [
     "build_user_guide",
     "test_user_guide",
 ]
+
+#   ▄▄▄▄    ▄▄▄▄▄▄    ▄▄▄▄▄▄▄▄   ▄▄▄▄▄▄   ▄▄▄  ▄▄▄   ▄▄▄▄▄▄   ▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄  ▄▄▄▄▄
+#  ██▀▀██   ██▀▀▀▀█▄  ▀▀▀██▀▀▀   ▀▀██▀▀   ███  ███   ▀▀██▀▀   ▀▀▀▀▀███  ██▀▀▀▀▀▀  ██▀▀▀██
+# ██    ██  ██    ██     ██        ██     ████████     ██         ██▀   ██        ██    ██
+# ██    ██  ██████▀      ██        ██     ██ ██ ██     ██       ▄██▀    ███████   ██    ██
+# ██    ██  ██           ██        ██     ██ ▀▀ ██     ██      ▄██      ██        ██    ██
+#  ██▄▄██   ██           ██      ▄▄██▄▄   ██    ██   ▄▄██▄▄   ███▄▄▄▄▄  ██▄▄▄▄▄▄  ██▄▄▄██
+#   ▀▀▀▀    ▀▀           ▀▀      ▀▀▀▀▀▀   ▀▀    ▀▀   ▀▀▀▀▀▀   ▀▀▀▀▀▀▀▀  ▀▀▀▀▀▀▀▀  ▀▀▀▀▀
 
 [tasks.build_release]
 command = "cargo"
