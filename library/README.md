@@ -80,7 +80,7 @@ activated by default.
 [`cargo deny`][18] is another linter for your dependencies.  It is configured
 via the `deny.toml` file in the root of the crate.
 
-## ``mdbook
+## `mdbook`
 
 [`mdbook`][12] is used to generate higher-level documentation.  The template has
 the start of a book in the `docs/user_guide` directory.  It is configured via
@@ -118,7 +118,10 @@ producing warnings on any targets that don't exist or don't respond.
 ## `mdbook-linkcheck`
 
 [`mdbook-linkcheck`][21] is another link checker, but specifically designed for
-the [`mdbook`][12] tool.
+the [`mdbook`][12] tool.  Note that at the time of this
+writing, [`mdbook-linkcheck`][21] has a bug in it that prevents its use in this
+project.  However, we're hopeful that it will be working again soon, and will
+reinstate its use once that happens.
 
 [1]: https://crates.io/crates/cargo-generate
 [2]: https://crates.io/crates/cargo-readme

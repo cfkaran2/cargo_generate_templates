@@ -212,7 +212,7 @@ Refactoring is the fine art of:
 1. Realizing that the the code/architecture isn't as good as you wish it was.
 2. Understanding and avoiding the [sunk cost fallacy][l21].
 3. Using what you've learned thus far to select a better architecture.
-4. And finally, actuall doing the [refactoring][l22].
+4. And finally, actually doing the [refactoring][l22].
 
 Refactoring is never easy; it requires you to rewrite large chunks of code, and
 from the outside it often looks like you didn't do anything.  It *is* necessary
@@ -488,7 +488,7 @@ not repeat it ([DRY principle][l12]).
 At the crate level, we see code examples within the documentation itself. These
 are generally small, self-contained chunks of code that illustrate what
 problems the crate is solving.  They shouldn't reference code outside of the
-crate, but that is a guideline not a fast and hard rule.  Any code should be
+crate, but that is a guideline, not a hard and fast rule.  Any code should be
 able to pass standard doc tests; if they fail, it is a sign that the
 documentation needs to be updated.
 
@@ -568,29 +568,44 @@ needed, safety conditions.  For example:
 /// # Parameters
 ///
 /// If a function accepts arguments, then they *must* be described here.  In
-/// general, this should be in the form of a list, similar to the following:
+/// general, this should be in the form of subsections, similar to the
+/// following:
 ///
-/// - `arg` - A description of `arg`.  You do not need to detail what the type
-///   is as the compiler will fill that in for you, but you must describe what
-///   it is for.  Most importantly, if there are values that can be passed in
-///   that are not allowed, you **must** describe them here.  For example, if
-///   `arg` must be in the range `[0, 10]` or a panic can occur, then
-///   you **must** provide a warning about that here, as well as provide the
-///   warning in the `Panics` section above.
-/// - `next_arg` - The next argument in the list
-/// - `and_so_forth`
+/// ## `arg`
+///
+/// A description of `arg`.  You do not need to detail what the type is as the
+/// compiler will fill that in for you, but you must describe what it is for.
+/// Most importantly, if there are values that can be passed in that are not
+/// allowed, you **must** describe them here.  For example, if `arg` must be in
+/// the range `[0, 10]` or a panic can occur, then you **must** provide a
+/// warning about that here, as well as provide the warning in the `Panics`
+/// section above.
+///
+/// ## `next_arg`
+///
+/// The next argument in the list
+///
+/// ## `and_so_forth`
+///
+/// etc., etc., etc.
+///
+/// Separating each parameter into its own subsection will give you the space
+/// you need to fully discuss it, should you need that amount of space.
 ///
 /// # Returns
 ///
-/// Provide a complete description of what is returned.  The type information
-/// will be picked up by the compiler, but how and why a particular instance is
+/// Provide a complete description of what is returned *when no errors occur*.
+/// In short, this is the expected return path.  The type information will be
+/// picked up by the compiler, but how and why a particular instance is
 /// returned is not always obvious from the return type, which is why you
 /// **must** explain it here.  If you return a [`Result`], then the value of the
 /// [`Ok`] variant is documented here, while the content of the [`Err`] variant
 /// is documented in the `Error` section below.
 ///
-/// The only case where you don't need the `Returns` section is if nothing
-/// (AKA, the `unit` type, `()`) is returned.
+/// The only case where you don't need the `Returns` section is if nothing is
+/// returned.  This will happen if the return type is either `()` (the unit
+/// type) or `!` (the never type).  In all other cases, it's best to document
+/// what is returned.
 ///
 /// # Errors (optional)
 ///
@@ -613,6 +628,25 @@ needed, safety conditions.  For example:
 ///    the appropriate [`FooError`] type will be returned in the `Err` variant.
 ///    Read the documentation for [`FooError`] for more information on what
 ///    kinds of errors you might need to deal with.
+///
+///	   # Parameters
+///
+///    ## `arg`
+///
+///    The value for which you want the additive inverse.
+///
+///    # Returns
+///
+///    If all goes well, then the additive inverse of `arg` will be returned in
+///    the [`Ok`] variant.
+///
+///    # Errors
+///
+///    There are a number of different errors that you might run into, with the
+///    most common one being [`FooError::Bar`], which signals that the RPC
+///    server has left the building to go find a pint somewhere.  If this
+///    happens, it's best to wait until the server sobers up or the results you
+///    get back might not be correct.
 pub fn foo(arg: u8) -> Result<u8, FooError> {
     todo!()
 }
@@ -664,8 +698,8 @@ git config --global trailer.sign.ifexists addIfDifferent
 git config --global trailer.sign.command 'echo "$(git config user.name) <$(git config user.email)>"'
 ```
 
-Or, if you only want to sign off on this project, then change directories to
-the root of this project and execute:
+Or, if you only want to sign off on this project only, then change directories
+to the root of this project and execute:
 
 ```bash
 git config trailer.sign.key "Signed-off-by: "
