@@ -231,64 +231,70 @@ runnable = true
 #"/appendices/bibliography.html" = "https://rustc-dev-guide.rust-lang.org/appendix/bibliography.html"
 #"/other-installation-methods.html" = "../infra/other-installation-methods.html"
 
-# Verify that all links are live links.  Requires the [`mdbook-linkcheck`][1]
-# tool to work correctly.
+###
+### The mdbook-linkcheck and mdbook-linkcheck2 plugins have a bug that hasn't
+### been fixed.  I'm commenting out the use of either plugin for the time
+### being.
+###
+
+# # Verify that all links are live links.  Requires the [`mdbook-linkcheck2`][1]
+# # tool to work correctly.
+# #
+# # [1]: https://crates.io/crates/mdbook-linkcheck2
+# [output.linkcheck2]
 #
-# [1]: https://crates.io/crates/mdbook-linkcheck
-[output.linkcheck]
-
-# Should we check links on the internet? Enabling this option adds a
-# non-negligible performance impact.
-follow-web-links = true
-
-# Are we allowed to link to files outside of the book's root directory? This may
-# help prevent linking to sensitive files (e.g. "../../../../etc/shadow")
-traverse-parent-directories = false
-
-# If necessary, you can exclude one or more links from being checked with a list
-# of regular expressions. The regex will be applied to the link href (i.e. the
-# `./index.html` in `[some page](./index.html)`) so it can be used to ignore
-# both web and filesystem links.
+# # Should we check links on the internet? Enabling this option adds a
+# # non-negligible performance impact.
+# follow-web-links = true
 #
-# Hint: you can use TOML's raw strings (single quote) to avoid needing to escape
-# things twice.
-#exclude = [ 'google\.com' ]
-
-# The User-Agent to use when sending web requests
-user-agent = "mdbook-linkcheck-0.7.7"
-
-# The number of seconds a cached result is valid for (12 hrs by default)
-cache-timeout = 43200
-
-# How should warnings be treated?
+# # Are we allowed to link to files outside of the book's root directory? This may
+# # help prevent linking to sensitive files (e.g. "../../../../etc/shadow")
+# traverse-parent-directories = false
 #
-# - "warn" will emit warning messages
-# - "error" treats all warnings as errors, failing the linkcheck
-# - "ignore" will ignore warnings, suppressing diagnostic messages and allowing
-#   the linkcheck to continuing
-warning-policy = "warn"
-
-# Extra HTTP headers that must be sent to certain web sites in order to link
-# check to succeed.
+# # If necessary, you can exclude one or more links from being checked with a list
+# # of regular expressions. The regex will be applied to the link href (i.e. the
+# # `./index.html` in `[some page](./index.html)`) so it can be used to ignore
+# # both web and filesystem links.
+# #
+# # Hint: you can use TOML's raw strings (single quote) to avoid needing to escape
+# # things twice.
+# #exclude = [ 'google\.com' ]
 #
-# This is a dictionary (map), with keys being regexes matching a set of web
-# sites, and values being an array of the headers.
-[output.linkcheck.http-headers]
-
-# Any hyperlink that contains this regexp will be sent
-# the "Accept: text/html" header
-'crates\.io' = [
-    "Accept: text/html"
-]
-
-# mdbook-linkcheck will interpolate environment variables into your header via
-# $IDENT.
+# # The User-Agent to use when sending web requests
+# user-agent = "mdbook-linkcheck2-0.13.0"
 #
-# If this is not what you want you must escape the `$` symbol, like `\$TOKEN`.
-# `\` itself can also be escaped via `\\`.
+# # The number of seconds a cached result is valid for (12 hrs by default)
+# cache-timeout = 43200
 #
-# Note: If interpolation fails, the header will be skipped and the failure will
-# be logged. This can be useful if a particular header isn't always necessary,
-# but may be helpful (e.g. when working with rate limiting).
-#'website\.com' = ["Authorization: Basic $TOKEN"]
+# # How should warnings be treated?
+# #
+# # - "warn" will emit warning messages
+# # - "error" treats all warnings as errors, failing the linkcheck
+# # - "ignore" will ignore warnings, suppressing diagnostic messages and allowing
+# #   the linkcheck to continuing
+# warning-policy = "warn"
+#
+# # Extra HTTP headers that must be sent to certain web sites in order to link
+# # check to succeed.
+# #
+# # This is a dictionary (map), with keys being regexes matching a set of web
+# # sites, and values being an array of the headers.
+# [output.linkcheck.http-headers]
+#
+# # Any hyperlink that contains this regexp will be sent
+# # the "Accept: text/html" header
+# 'crates\.io' = [
+#     "Accept: text/html",
+# ]
+#
+# # mdbook-linkcheck will interpolate environment variables into your header via
+# # $IDENT.
+# #
+# # If this is not what you want you must escape the `$` symbol, like `\$TOKEN`.
+# # `\` itself can also be escaped via `\\`.
+# #
+# # Note: If interpolation fails, the header will be skipped and the failure will
+# # be logged. This can be useful if a particular header isn't always necessary,
+# # but may be helpful (e.g. when working with rate limiting).
+# #'website\.com' = ["Authorization: Basic $TOKEN"]
 {%- endraw %}
