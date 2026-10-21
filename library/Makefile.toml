@@ -236,7 +236,7 @@ script = '''
 use std::error::Error;
 
 fn main() -> Result<(), Box<dyn Error>> {
-    // FIXME: Maybe I should add intropection capabilities so that the target
+    // FIXME: Maybe I should add introspection capabilities so that the target
     // list is constructed by parsing Makefile.toml.  That would ensure that
     // this target is never out of date.
 
@@ -258,9 +258,9 @@ fn main() -> Result<(), Box<dyn Error>> {
               targets as some of them can be useful on their own.\n");
 
     println!("'clean' - Removes all build products from this project.\n");
-    println!("'dev-flow' - Builds all artifacts in debug mode.  This will \
-              also run numerous checks and tests, so it's a lot more than \
-              just a debug build.\n");
+    println!("'dev-flow' - **DEFAULT TARGET** Builds all artifacts in debug  \
+              mode.  This will also run numerous checks and tests, so it's  \
+              a lot more than just a debug build.\n");
     println!("'optimized-flow' - Builds all artifacts in release mode.  This \
              mode runs fewer checks than 'dev-flow', but takes longer because \
              of the effort taken for optimization.  Be warned that the \
