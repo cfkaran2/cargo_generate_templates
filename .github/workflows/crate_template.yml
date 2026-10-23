@@ -15,7 +15,7 @@ on:
 
 jobs:
   binary:
-    name: "crate_template --bin"
+    name: crate_template_bin
     runs-on: ubuntu-latest
     steps:
       - name: "Tests creating a binary template then running 'cargo make' on it."
