@@ -26,11 +26,38 @@ jobs:
           rustup toolchain install beta nightly
           rustup update
 
+          # At this point we should be able to install our most basic tools
+          cargo install cargo-make
+          cargo install cargo-generate
 
+          # This ensures that if the image already has some cargo tools
+          # installed that they are updated to the latest versions.
+          cargo install cargo-update
+          cargo install-update -a
 
-          # # We need to move the generated project to a temp folder, away from
-          # # the template project otherwise `cargo` runs would fail. See
-          # # https://github.com/rust-lang/cargo/issues/9922 for more info.
-          # mv $PROJECT_NAME ${{ runner.temp }}/
-          # cd ${{ runner.temp }}/$PROJECT_NAME
+          # I'm deleting whatever is in the working directory as we don't want
+          # or need it.  We're going to generate it from scratch using
+          # 'cargo generate'
+          rm -rf *
+          rm -rf .* # Some shells don't delete hidden files unless you tell them to like this.
 
+          # Ladies and gentlemen, the moment you've all been waiting for!
+          cargo generate --name "binary_crate" \
+            --bin \
+            -g https://github.com/cfkaran2/cargo_generate_templates.git \
+            -d rust_edition="2024" \
+            -d short_description="A binary crate" \
+            -d long_description="A crate generated using the 'cargo generate' command." \
+            -d version="0.0.1" \
+            -d identifier="com.fake.binary_crate_test" \
+            -d abuse_email="abuse@fake.com" \
+            -d user_guide_title="Binary User Guide"
+
+          # Now to test that it worked.  We don't really care about the output
+          # of the following commands, just that they don't fail.
+          cd binary_crate
+          cargo make
+          cargo make dev-flow
+          cargo make optimized-flow
+          cargo make clean
+          cargo make help
