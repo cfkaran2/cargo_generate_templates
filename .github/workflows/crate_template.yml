@@ -22,7 +22,7 @@ jobs:
         run: |
           # # Install rust tooling and make sure they're in the path
           curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-          source .cargo/env
+          . "$HOME/.cargo/env"
           rustup toolchain install beta nightly
           rustup update
 
