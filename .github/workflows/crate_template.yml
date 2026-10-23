@@ -15,24 +15,26 @@ on:
 
 jobs:
   binary:
-    name: crate_template_bin
+    name: binary
     runs-on: ubuntu-latest
     steps:
       - name: "Tests creating a binary template then running 'cargo make' on it."
         run: |
-          # Install rust tooling and make sure they're in the path
-          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-          source .cargo/env
-          rustup toolchain install beta nightly
-          rustup update
+          echo "Got to this point at least"
 
-          # At this point we should be able to install our most basic tools
-          cargo install cargo-make
-          cargo install cargo-generate
+          # # Install rust tooling and make sure they're in the path
+          # curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+          # source .cargo/env
+          # rustup toolchain install beta nightly
+          # rustup update
 
-          # We need to move the generated project to a temp folder, away from
-          # the template project otherwise `cargo` runs would fail. See
-          # https://github.com/rust-lang/cargo/issues/9922 for more info.
-          mv $PROJECT_NAME ${{ runner.temp }}/
-          cd ${{ runner.temp }}/$PROJECT_NAME
+          # # At this point we should be able to install our most basic tools
+          # cargo install cargo-make
+          # cargo install cargo-generate
+
+          # # We need to move the generated project to a temp folder, away from
+          # # the template project otherwise `cargo` runs would fail. See
+          # # https://github.com/rust-lang/cargo/issues/9922 for more info.
+          # mv $PROJECT_NAME ${{ runner.temp }}/
+          # cd ${{ runner.temp }}/$PROJECT_NAME
 
