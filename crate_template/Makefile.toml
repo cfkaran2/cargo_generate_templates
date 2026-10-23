@@ -71,6 +71,7 @@ args = [
 
 [tasks.deny]
 command = "cargo"
+install_crate = { crate_name = "cargo-deny", test_arg = "-V" }
 args = [
     "deny",
     "check",
@@ -191,6 +192,7 @@ dependencies = [
 
 [tasks.build_release]
 command = "cargo"
+install_crate = { crate_name = "cargo-auditable", test_arg = "-V" }
 args = [
     "auditable",
     "build",
