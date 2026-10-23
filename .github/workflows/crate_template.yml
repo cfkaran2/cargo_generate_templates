@@ -26,9 +26,23 @@ jobs:
           rustup toolchain install beta nightly
           rustup update
 
-          # At this point we should be able to install our most basic tools
-          cargo install cargo-make
+          # There seems to be some kind of issue with cargo-make where it isn't
+          # installing the necessary tooling on it's own.  As a workaround, I'm
+          # manually installing everything that's needed.
+          cargo install cargo-auditable
+          cargo install cargo-deadlinks
+          cargo install cargo-deny
           cargo install cargo-generate
+          cargo install cargo-llvm-cov
+          cargo install cargo-make
+          cargo install cargo-readme
+          cargo install cargo-udeps
+          cargo install mdbook
+          cargo install taplo-cli
+
+          # I have to do this a second time to ensure that the tools are
+          # properly picked up.
+          . "$HOME/.cargo/env"
 
           # This ensures that if the image already has some cargo tools
           # installed that they are updated to the latest versions.
