@@ -28,7 +28,7 @@ jobs:
 
           # This is just while I'm testing, as I have no idea where I am, nor
           # what I have access to.
-          realpath
+          realpath .
           ls -Falk --color
 
           # # We need to move the generated project to a temp folder, away from
