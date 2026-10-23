@@ -30,6 +30,13 @@ jobs:
           # what I have access to.
           realpath .
           ls -Falk --color
+          cd ..
+          realpath .
+          ls -Falk --color
+          cd ..
+          realpath .
+          ls -Falk --color
+
 
           # # We need to move the generated project to a temp folder, away from
           # # the template project otherwise `cargo` runs would fail. See
