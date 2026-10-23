@@ -1,0 +1,38 @@
+name: Crate Template
+run-name: Testing out the contents of the 'crate_template' directory.
+
+# Scheduled to run whenever a push happens and at midnight on every Sunday. The
+# former is for changes we introduce, the latter is for changes to the
+# environment that we don't have control over (e.g., a new edition of Rust
+# breaks the template).
+on:
+  push:
+    branches:
+      - '**' # Always runs whenever a push happens
+  schedule:
+    - cron: '0 0 * * 0' # Runs this every Sunday at midnight EST.
+      timezone: "America/New_York"
+
+jobs:
+  binary:
+    name: "crate_template --bin"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Tests creating a binary template then running 'cargo make' on it."
+        run: |
+          # Install rust tooling and make sure they're in the path
+          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+          source .cargo/env
+          rustup toolchain install beta nightly
+          rustup update
+
+          # At this point we should be able to install our most basic tools
+          cargo install cargo-make
+          cargo install cargo-generate
+
+          # We need to move the generated project to a temp folder, away from
+          # the template project otherwise `cargo` runs would fail. See
+          # https://github.com/rust-lang/cargo/issues/9922 for more info.
+          mv $PROJECT_NAME ${{ runner.temp }}/
+          cd ${{ runner.temp }}/$PROJECT_NAME
+
