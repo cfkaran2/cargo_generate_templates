@@ -69,9 +69,35 @@ jobs:
 
           # Now to test that it worked.  We don't really care about the output
           # of the following commands, just that they don't fail.
-          cd binary_crate
+          pushd binary_crate
+
           cargo make
           cargo make dev-flow
           cargo make optimized-flow
           cargo make clean
           cargo make help
+
+          # Now to do the same thing, but as a library
+
+          popd
+
+          cargo generate --name "library_crate" \
+            --bin \
+            -g https://github.com/cfkaran2/cargo_generate_templates.git \
+            -d rust_edition="2024" \
+            -d short_description="A library crate" \
+            -d long_description="A crate generated using the 'cargo generate' command." \
+            -d version="0.0.1" \
+            -d identifier="com.fake.library_crate_test" \
+            -d abuse_email="abuse@fake.com" \
+            -d user_guide_title="Library User Guide"
+
+          pushd library_crate
+
+          cargo make
+          cargo make dev-flow
+          cargo make optimized-flow
+          cargo make clean
+          cargo make help
+
+          popd
