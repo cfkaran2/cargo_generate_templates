@@ -256,12 +256,7 @@ jobs:
           # echo "VVV Environment VVV"
           # printenv | sort
           # echo "^^^ End Environment ^^^"
-          echo
-          echo -n "Current path and directories: "
-          realpath .
-          ls -Falk --color=never .
-          echo
-          pushd %USERPROFILE%
+          pushd $HOME
           echo
           echo -n "Current path and directories: "
           realpath .
