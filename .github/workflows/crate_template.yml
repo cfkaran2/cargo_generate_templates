@@ -130,6 +130,9 @@ jobs:
       - name: "Installing stable, beta, and nightly Rust toolchains"
         shell: bash
         run: |
+          # Make sure that we're in our home directory
+          cd
+
           # I'm uninstalling any Rust toolchains that are currently installed to
           # ensure that the only toolchains are the latest ones.  If rustup
           # isn't currently installed, then this *shouldn't* cause any issues as
@@ -176,12 +179,6 @@ jobs:
       - name: 'Testing binary crate build'
         shell: bash
         run: |
-          # I'm deleting whatever is in the working directory as we don't want
-          # or need it.  We're going to generate it from scratch using
-          # 'cargo generate'
-          rm -rf *
-          rm -rf .* # Some shells don't delete hidden files unless you tell them to like this.
-
           # Ladies and gentlemen, the moment you've all been waiting for!
           cargo generate --name "binary_crate" \
             --bin \
