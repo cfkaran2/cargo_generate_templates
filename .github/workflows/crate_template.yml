@@ -14,18 +14,33 @@ on:
       timezone: "America/New_York"
 
 jobs:
-  binary:
-    name: binary
+  ubuntu_tests:
+    name: "Ubuntu-latest for binary and library crates"
     runs-on: ubuntu-latest
     steps:
-      - name: "Tests creating a binary template then running 'cargo make' on it."
+      - name: "Installing stable, beta, and nightly Rust toolchains"
+        shell: bash
         run: |
+          # I'm uninstalling any Rust toolchains that are currently installed to
+          # ensure that the only toolchains are the latest ones.  If rustup
+          # isn't currently installed, then this *shouldn't* cause any issues as
+          # the return code will be overwritten by the next command.
+          toolchains=$( rustup toolchain list -q )
+          for thing in $toolchains
+          do
+            rustup toolchain uninstall thing
+          done
+
           # Install rust tooling and make sure they're in the path
           curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
           . "$HOME/.cargo/env"
-          rustup toolchain install beta nightly
+
+          rustup toolchain install stable beta nightly
           rustup update
 
+      - name: "Installing various cargo support tools"
+        shell: bash
+        run: |
           # There seems to be some kind of issue with cargo-make where it isn't
           # installing the necessary tooling on it's own.  As a workaround, I'm
           # manually installing everything that's needed.
@@ -37,6 +52,7 @@ jobs:
           cargo install cargo-make
           cargo install cargo-readme
           cargo install cargo-udeps
+          cargo install cargo-update
           cargo install mdbook
           cargo install taplo-cli
 
@@ -46,9 +62,11 @@ jobs:
 
           # This ensures that if the image already has some cargo tools
           # installed that they are updated to the latest versions.
-          cargo install cargo-update
           cargo install-update -a
 
+      - name: 'Testing binary crate build'
+        shell: bash
+        run: |
           # I'm deleting whatever is in the working directory as we don't want
           # or need it.  We're going to generate it from scratch using
           # 'cargo generate'
@@ -69,6 +87,7 @@ jobs:
 
           # Now to test that it worked.  We don't really care about the output
           # of the following commands, just that they don't fail.
+
           pushd binary_crate
 
           cargo make
@@ -77,10 +96,11 @@ jobs:
           cargo make clean
           cargo make help
 
-          # Now to do the same thing, but as a library
-
           popd
 
+      - name: 'Testing library crate build'
+        shell: bash
+        run: |
           cargo generate --name "library_crate" \
             --bin \
             -g https://github.com/cfkaran2/cargo_generate_templates.git \
