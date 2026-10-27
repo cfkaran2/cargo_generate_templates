@@ -262,9 +262,14 @@ jobs:
           realpath .
           ls -Falk --color=never .
           echo
+          pushd .cargo
+          echo
+          echo -n "Current path and directories: "
+          realpath .
+          ls -Falk --color=never .
           ### END OF DEBUGGING
 
-          . "%USERPROFILE%/.cargo/env"
+          . "$HOME/.cargo/env"
 
           rustup toolchain install stable beta nightly
           rustup update
