@@ -253,13 +253,13 @@ jobs:
           curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
           ### DEBUGGING BELOW
-          echo "VVV Environment VVV"
-          printenv | sort
-          echo "^^^ End Environment ^^^"
+          # echo "VVV Environment VVV"
+          # printenv | sort
+          # echo "^^^ End Environment ^^^"
           echo
           echo -n "Current path and directories: "
           realpath .
-          ls -Falk --color .
+          ls -Falk --color=never .
           echo
           ### END OF DEBUGGING
 
