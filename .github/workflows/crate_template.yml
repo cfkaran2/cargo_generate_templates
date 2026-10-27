@@ -251,6 +251,18 @@ jobs:
 
           # Install rust tooling and make sure they're in the path
           curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+
+          ### DEBUGGING BELOW
+          echo "VVV Environment VVV"
+          printenv | sort
+          echo "^^^ End Environment ^^^"
+          echo
+          echo -n "Current path and directories: "
+          realpath .
+          ls -Falk --color .
+          echo
+          ### END OF DEBUGGING
+
           . "$HOME/.cargo/env"
 
           rustup toolchain install stable beta nightly
