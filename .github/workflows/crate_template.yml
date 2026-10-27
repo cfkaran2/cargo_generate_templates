@@ -252,25 +252,6 @@ jobs:
           # Install rust tooling and make sure they're in the path
           curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
-          ### DEBUGGING BELOW
-          # echo "VVV Environment VVV"
-          # printenv | sort
-          # echo "^^^ End Environment ^^^"
-          pushd $HOME
-          echo
-          echo -n "Current path and directories: "
-          realpath .
-          ls -Falk --color=never .
-          echo
-          pushd .cargo
-          echo
-          echo -n "Current path and directories: "
-          realpath .
-          ls -Falk --color=never .
-          ### END OF DEBUGGING
-
-          . "$HOME/.cargo/env"
-
           rustup toolchain install stable beta nightly
           rustup update
 
@@ -291,10 +272,6 @@ jobs:
           cargo install cargo-update
           cargo install mdbook
           cargo install taplo-cli
-
-          # I have to do this a second time to ensure that the tools are
-          # properly picked up.
-          . "$HOME/.cargo/env"
 
           # This ensures that if the image already has some cargo tools
           # installed that they are updated to the latest versions.
